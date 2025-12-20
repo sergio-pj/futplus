@@ -7,8 +7,9 @@
 }
 
 body {
-    background-color: #0b0b0b; /* Preto quase puro */
+    background-color: #0b0b0b;
     color: #ffffff;
+    line-height: 1.6;
 }
 
 /* Header */
@@ -60,21 +61,22 @@ nav ul li a:hover {
 
 /* Seção Hero (Banner) */
 .hero {
-    height: 70vh;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
-                url('SUA-IMAGEM-DO-NEYMAR-MESSI-CR7.jpg'); /* Você vai colocar sua foto aqui */
+    height: 85vh;
+    background: url('img_roles/banner.png'); 
     background-size: cover;
     background-position: center;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end; /* Alinha o conteúdo (botão) para o final da seção */
+    padding-bottom: 50px; /* Distância do botão em relação ao fim da imagem */
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    font-weight: 900;
-    margin-bottom: 10px;
+    font-size: clamp(2rem, 8vw, 4rem); /* Tamanho responsivo */
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+    margin-bottom: 0;
 }
 
 .promo-badge {
@@ -87,14 +89,23 @@ nav ul li a:hover {
 /* Botão Neon */
 .btn-neon {
     display: inline-block;
-    padding: 15px 30px;
+    padding: 15px 35px;
     background-color: #39FF14;
     color: #000;
     text-decoration: none;
-    font-weight: 900;
+    font-weight: 950;
     border-radius: 5px;
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
     transition: 0.4s;
+    margin-top: 0; /* Resetado para não quebrar */
+    animation: pulse-neon 2s infinite;
+    box-shadow: 0 0 10px #39FF14;
+    text-transform: uppercase;
+}
+
+@keyframes pulse-neon {
+    0% { box-shadow: 0 0 5px #39FF14; }
+    50% { box-shadow: 0 0 25px #39FF14; }
+    100% { box-shadow: 0 0 5px #39FF14; }
 }
 
 .btn-neon:hover {
@@ -223,4 +234,168 @@ nav ul li a:hover {
 .btn-buy-now:hover {
     background: #39FF14;
     color: #000;
+}
+
+footer {
+    background-color: #000;
+    border-top: 1px solid #39FF14; /* Linha neon no topo do rodapé */
+    padding: 50px 10% 20px;
+    margin-top: 50px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-box h4 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.footer-box h4 span {
+    color: #39FF14;
+}
+
+.footer-box ul {
+    list-style: none;
+}
+
+.footer-box ul li {
+    margin-bottom: 10px;
+}
+
+.footer-box ul li a {
+    color: #888;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-box ul li a:hover {
+    color: #39FF14;
+}
+
+.payment-icons img {
+    width: 40px;
+    margin-right: 10px;
+    filter: grayscale(100%); /* Fica cinza e ganha cor no hover */
+    transition: 0.3s;
+}
+
+.payment-icons img:hover {
+    filter: grayscale(0%);
+}
+
+.copyright {
+    text-align: center;
+    color: #555;
+    font-size: 0.8rem;
+    margin-top: 40px;
+    border-top: 1px solid #222;
+    padding-top: 20px;
+}
+
+.size-table {
+    padding: 50px 10%;
+    background: rgba(26, 26, 26, 0.8); /* Fundo semi-transparente para o bloco */
+    margin: 40px 0;
+    border-radius: 15px;
+}
+
+.table-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: #39FF14;
+    color: #000;
+    padding: 15px;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+tr:hover {
+    background: rgba(57, 255, 20, 0.1);
+}
+
+.obs {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+}
+
+.categories-mosaico {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px 10%;
+}
+
+.cat-card {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.4s;
+    filter: grayscale(40%);
+}
+
+.cat-card span {
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 5px #000;
+}
+
+.cat-card:hover {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px #39FF14;
+}
+
+/* Coloque fotos de estádios ou torcidas aqui */
+.brasuca { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('brasileirao.jpg'); }
+.europeus { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('europeus.jpg'); }
+.retro { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('retro.jpg'); }
+
+.benefits-bar {
+    background: #1a1a1a;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 10%;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #39FF14;
+    text-transform: uppercase;
+}
+
+.product-card {
+    border: 1px solid rgba(57, 255, 20, 0.2); /* Borda discreta */
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    border: 1px solid #39FF14; /* Verde neon brilha no hover */
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    transform: translateY(-5px); /* Efeito de levante */
 }
