@@ -1,46 +1,208 @@
-/* Estilo do botão Adicionar ao Carrinho */
-.btn-add-cart {
-    width: 100%;
-    padding: 18px;
-    background: transparent;
-    color: #39ff14; /* Verde Neon */
-    border: 2px solid #39ff14;
+/* --- ESTILO DA PÁGINA SOBRE --- */
+
+.about-container {
+    padding-top: 60px; /* Espaço para o header */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 1. HERO SOBRE */
+.about-hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.about-hero h1 {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
     font-weight: 900;
-    font-size: 1.1rem;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-top: 15px; /* Espaço entre os botões */
-    transition: 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    line-height: 1.2;
+    margin-bottom: 20px;
 }
 
-.btn-add-cart:hover {
-    background: rgba(57, 255, 20, 0.1);
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
-    transform: translateY(-2px);
+.about-hero h1 span {
+    color: #39FF14;
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
 }
 
-/* Ajuste no ícone do carrinho no Header para ele brilhar */
-.cart-icon {
-    position: relative;
-    display: flex;
-    align-items: center;
-    color: white;
+.about-hero p {
+    color: #888;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* 2. GRID DE DIFERENCIAIS */
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 10%;
+}
+
+.about-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.4s ease;
+}
+
+.about-card:hover {
+    border-color: #39FF14;
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.05);
+}
+
+.about-card i {
+    font-size: 3rem;
+    color: #39FF14;
+    margin-bottom: 20px;
+}
+
+.about-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.about-card p {
+    color: #888;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* 3. CTA (Chamada para Ação) */
+.about-cta {
+    text-align: center;
+    padding: 100px 20px;
+    background: linear-gradient(to bottom, transparent, rgba(57, 255, 20, 0.05));
+}
+
+.about-cta h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+/* --- REAPROVEITANDO PADRÕES DO GLOBAL --- */
+
+.btn-neon {
+    display: inline-block;
+    padding: 15px 35px;
+    background-color: #39FF14;
+    color: #000;
     text-decoration: none;
+    font-weight: 950;
+    border-radius: 5px;
+    transition: 0.4s;
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    text-transform: uppercase;
 }
 
-#cart-count {
-    background: #39ff14;
-    color: black;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    box-shadow: 0 0 10px #39ff14;
+.btn-neon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #39FF14;
+}
+
+/* --- RODAPÉ PADRONIZADO (IGUAL À HOME) --- */
+.main-footer {
+    background-color: #000;
+    border-top: 1px solid #39FF14;
+    padding: 60px 10% 20px;
+    margin-top: 80px;
+    width: 100%;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-box h4 {
+    color: #fff;
+    margin-bottom: 25px;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.footer-box h4 span {
+    color: #39FF14;
+}
+
+.footer-box p, .footer-box ul li a {
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-box ul li {
+    margin-bottom: 12px;
+}
+
+.footer-box ul li a:hover {
+    color: #39FF14;
+    padding-left: 5px; /* Pequeno efeito de movimento */
+}
+
+.payment-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.payment-icons i:hover {
+    color: #39FF14;
+    cursor: pointer;
+}
+
+.copyright {
+    text-align: center;
+    color: #444;
+    font-size: 0.75rem;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #111;
+}
+
+/* RESPONSIVIDADE DO RODAPÉ */
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .payment-icons {
+        justify-content: center;
+    }
+}
+
+/* --- RESPONSIVIDADE MOBILE --- */
+@media (max-width: 768px) {
+    .about-hero {
+        padding: 50px 20px;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr; /* Empilha os cards no celular */
+        padding: 20px;
+    }
+
+    .about-card {
+        padding: 30px 20px;
+    }
+
+    .about-cta h2 {
+        font-size: 1.5rem;
+    }
 }

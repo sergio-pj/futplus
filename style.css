@@ -96,8 +96,7 @@ nav ul li a:hover {
     font-weight: 950;
     border-radius: 5px;
     transition: 0.4s;
-    margin-top: 0; /* Resetado para não quebrar */
-    animation: pulse-neon 2s infinite;
+    margin-top: 50px;    animation: pulse-neon 2s infinite;
     box-shadow: 0 0 10px #39FF14;
     text-transform: uppercase;
 }
@@ -236,28 +235,35 @@ nav ul li a:hover {
     color: #000;
 }
 
+/* --- RODAPÉ PADRONIZADO (DESKTOP) --- */
 footer {
     background-color: #000;
-    border-top: 1px solid #39FF14; /* Linha neon no topo do rodapé */
-    padding: 50px 10% 20px;
-    margin-top: 50px;
+    border-top: 1px solid #39FF14;
+    padding: 60px 10% 20px;
+    margin-top: 80px;
 }
 
 .footer-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Organiza colunas automáticas */
+    gap: 40px;
 }
 
 .footer-box h4 {
     color: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-size: 1.2rem;
+    font-weight: 900;
 }
 
 .footer-box h4 span {
     color: #39FF14;
+}
+
+.footer-box p {
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
 
 .footer-box ul {
@@ -265,37 +271,40 @@ footer {
 }
 
 .footer-box ul li {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .footer-box ul li a {
     color: #888;
     text-decoration: none;
     transition: 0.3s;
+    font-size: 0.9rem;
 }
 
 .footer-box ul li a:hover {
     color: #39FF14;
 }
 
-.payment-icons img {
-    width: 40px;
-    margin-right: 10px;
-    filter: grayscale(100%); /* Fica cinza e ganha cor no hover */
-    transition: 0.3s;
+/* Ícones de Pagamento com FontAwesome ou Imagem */
+.payment-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 1.8rem;
+    color: #fff;
 }
 
-.payment-icons img:hover {
-    filter: grayscale(0%);
+.payment-icons i:hover {
+    color: #39FF14;
+    cursor: pointer;
 }
 
 .copyright {
     text-align: center;
-    color: #555;
-    font-size: 0.8rem;
-    margin-top: 40px;
-    border-top: 1px solid #222;
+    color: #444;
+    font-size: 0.75rem;
+    margin-top: 50px;
     padding-top: 20px;
+    border-top: 1px solid #111;
 }
 
 .size-table {
@@ -456,4 +465,161 @@ tr:hover {
 
 .customization-fields {
     margin-top: 15px;
+}
+
+/* ==========================================================================
+   REFINAMENTO MOBILE DEFINITIVO (CORRIGIDO)
+   ========================================================================== */
+@media (max-width: 768px) {
+    
+    /* 1. CABEÇALHO: Ajuste para os links não encavalarem na Logo */
+    .nav-container {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 10px 0 !important;
+        gap: 10px;
+    }
+
+    .nav-links {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        width: 100%;
+        gap: 12px !important;
+    }
+
+    .nav-links li a {
+        font-size: 0.7rem !important;
+        letter-spacing: 0.5px;
+    }
+
+    .header-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-add-cart {
+        width: 90% !important;
+        font-size: 0.7rem !important;
+        padding: 10px !important;
+    }
+
+    /* 2. BANNER HERO: Otimizado para carregar a arte vertical */
+    .hero {
+        background-image: var(--bg-mobile) !important;
+        background-size: contain !important; 
+        background-repeat: no-repeat !important;
+        background-position: center top !important;
+        
+        /* Fundo de reserva para não parecer vazio enquanto a imagem carrega */
+        background-color: #000;
+        
+        image-rendering: -webkit-optimize-contrast; /* Melhora a nitidez */
+        will-change: transform;
+
+        /* Proporção para a arte 1080x1350 */
+        height: auto !important;
+        min-height: 560px !important; 
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; 
+        padding-bottom: 35px !important;
+    }
+
+    .hero-content {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
+    }
+
+    /* 3. BOTÃO WHATSAPP NEON */
+    .btn-neon {
+        width: 100%;
+        max-width: 300px;
+        padding: 14px !important;
+        font-size: 0.95rem !important;
+        font-weight: 900;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+    }
+
+    /* 4. MOSAICO DE CATEGORIAS */
+    .categories-mosaico {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .cat-card {
+        height: 90px !important;
+        font-size: 1.1rem !important;
+    }
+
+    .product-card {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: auto !important;
+    }
+    
+    /* 5. GRID DE PRODUTOS: 2 Colunas Alinhadas */
+    .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+
+    .product-image {
+        height: 150px !important;
+    }
+
+    .product-info h3 {
+        font-size: 0.75rem !important;
+        height: 35px;
+        line-height: 1.1;
+        padding: 5px 0;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .category {
+        font-size: 0.6rem !important;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .rating {
+        font-size: 0.65rem !important;
+        margin-bottom: 5px;
+    }
+
+    .price {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px;
+    }
+
+    .old-price {
+        font-size: 0.7rem !important;
+        display: block;
+    }
+
+    .btn-buy-now {
+        font-size: 0.65rem !important;
+        padding: 8px 5px !important;
+        width: 100%;
+        display: block;
+    }
+
+    .table {
+        width: 100%;
+        font-size: 0.8rem;
+    }
+
 }
