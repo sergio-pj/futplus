@@ -3,25 +3,35 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+    --preto-main: #0D0D0D;      /* Preto principal do script */
+    --preto-card: #141414;      /* Preto secundário para cards */
+    --branco: #FFFFFF;
+    --cinza-texto: #B3B3B3;     /* Cinza para textos secundários */
+    --verde-neon: #00FF5A;
+    --verde-soft: rgba(0, 255, 90, 0.15);
 }
 
 body {
-    background-color: #0b0b0b;
-    color: #ffffff;
+    background-color: var(--preto-main);
+    color: var(--branco);
+    font-family: 'Inter', sans-serif; /* Mix de fontes modernas */
     line-height: 1.6;
-    max-width: 100vw; 
-    overflow-x: hidden; /* Isso impede a barra de rolagem lateral chata */
 }
 
-/* Header */
+/* ==========================================================================
+   HEADER & NAVEGAÇÃO
+   ========================================================================== */
 .top-bar {
-    background-color: #39FF14; /* Verde Neon */
+    background-color: var(--verde-neon);
     color: #000;
     text-align: center;
-    padding: 5px;
-    font-size: 0.8rem;
-    font-weight: bold;
+    padding: 8px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 nav {
@@ -30,68 +40,132 @@ nav {
     align-items: center;
     padding: 15px 5%;
     background: #000;
-    border-bottom: 1px solid #222;
-    width: 100%; /* Garante que o fundo preto ocupe tudo */
+    border-bottom: 1px solid #1a1a1a;
+    width: 100%;
 }
 
 .nav-container {
-    max-width: 1700px; /* Limita o espalhamento no seu monitor de 21,5" */
+    max-width: 1700px;
     margin: 0 auto;
-    width: 100%; /* Dá um respiro nas bordas */
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
 }
 
 .logo {
     font-size: 1.8rem;
     font-weight: 900;
     letter-spacing: -1px;
+    text-transform: uppercase;
 }
 
 .logo span {
-    color: #39FF14;
+    color: var(--verde-neon);
 }
 
 nav ul {
     display: flex;
     list-style: none;
+    gap: 25px;
 }
 
 nav ul li a {
-    color: white;
+    color: var(--branco);
     text-decoration: none;
-    margin: 0 15px;
     font-weight: 700;
     font-size: 0.9rem;
-    transition: 0.3s;
+    transition: 0.3s ease;
+    text-transform: uppercase;
 }
 
 nav ul li a:hover {
-    color: #39FF14;
+    color: var(--verde-neon);
+}
+
+.hero-video {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  max-width: 700px;
+  padding: 0 20px;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 2px;
+  animation: fadeUp 1.2s ease forwards; 
+}
+
+.hero-content p {
+  margin: 15px 0 30px;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 /* Seção Hero (Banner) */
-.hero {
-    width: 100%;
-    /* Remova o min-height fixo */
-    aspect-ratio: 21 / 9; /* Ajuste esse número se a sua imagem for mais "alta" */
-    background-image: url('img_roles/BannerNew.png'); 
-    background-size: 100% 100%; /* Força a imagem a preencher a caixa toda */
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; 
-    align-items: center;
-    padding-bottom: 3%; /* Usa porcentagem para o botão subir/descer com o zoom */
+.hero-clean {
+  min-height: 85vh;
+  background: radial-gradient(circle at top, #0f0f0f, #000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
 }
 
-.hero h1 {
-    font-size: clamp(2rem, 8vw, 4rem); /* Tamanho responsivo */
-    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
-    margin-bottom: 0;
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.hero-text p {
+  margin: 1rem 0 2rem;
+  font-size: 1.1rem;
+  color: #bdbdbd;
 }
 
 .promo-badge {
@@ -103,51 +177,64 @@ nav ul li a:hover {
 
 /* Botão Neon */
 .btn-neon {
-    display: inline-block;
-    padding: 15px 35px;
-    background-color: #39FF14;
-    color: #000;
-    text-decoration: none;
-    font-weight: 950;
-    border-radius: 5px;
-    transition: 0.4s;
-    margin-top: 50px;    animation: pulse-neon 2s infinite;
-    box-shadow: 0 0 10px #39FF14;
-    text-transform: uppercase;
+  padding: 14px 32px;
+  border: 2px solid #00ff66;
+  color: #00ff66;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0,255,102,0.4);
 }
 
-@keyframes pulse-neon {
-    0% { box-shadow: 0 0 5px #39FF14; }
-    50% { box-shadow: 0 0 25px #39FF14; }
-    100% { box-shadow: 0 0 5px #39FF14; }
+.btn-neon.primary {
+  animation: pulse-neon 2s infinite;
+  box-shadow: 0 0 25px rgba(0,255,90,.6);
+  transform-origin: center;
+}
+
+.pulse {
+  animation: pulseNeon 2s infinite;
+}
+
+@keyframes pulseNeon {
+  0% {
+    box-shadow: 0 0 10px rgba(0,255,102,0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(0,255,102,0.9);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(0,255,102,0.4);
+  }
 }
 
 .btn-neon:hover {
-    box-shadow: 0 0 30px #39FF14;
-    transform: scale(1.05);
+  background: #00ff66;
+  color: #000;
+  box-shadow: 0 0 25px rgba(0,255,102,0.8);
 }
 
 /* Grid de Produtos */
 .products {
-    padding: 50px 10%;
+    padding: 60px 5%;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
 }
 
 .product-card {
-    background: #1a1a1a;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    transition: 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    border: 1px solid #39FF14;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0,255,102,0.15);
 }
 
 .product-card img {
@@ -155,42 +242,42 @@ nav ul li a:hover {
     border-radius: 5px;
 }
 
+.price-container {
+    margin-top: auto;
+    padding-bottom: 15px;
+}
+
 .price {
-    color: #39FF14;
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 10px 0;
+    color: var(--verde-neon);
+    font-size: 1.5rem;
+    font-weight: 900;
 }
 
 /* Títulos da Seção */
 .section-title {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .section-title h2 {
-    font-size: 2rem;
-    letter-spacing: 2px;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--verde-neon);
+    margin: 12px auto 0;
 }
 
 .section-title p {
-    color: #888;
-    font-size: 0.9rem;
-}
-
-/* Customização dos Cards */
-.product-card {
-    background: #111;
-    border: 1px solid #222;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-10px);
-    border-color: #39FF14;
-    box-shadow: 0 10px 20px rgba(57, 255, 20, 0.1);
+    color: var(--cinza-texto);
+    margin-top: 10px;
 }
 
 .badge-discount {
@@ -205,48 +292,55 @@ nav ul li a:hover {
     z-index: 2;
 }
 
+/* Informações do Produto */
 .product-info {
     padding: 20px;
-    text-align: left;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .category {
-    color: #39FF14;
-    font-size: 0.7rem;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
+    color: var(--verde-neon);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 8px;
 }
 
 .product-info h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    height: 40px; /* Mantém o alinhamento se o nome for longo */
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--branco);
+    min-height: 45px;
 }
 
 .old-price {
     text-decoration: line-through;
-    color: #666;
-    font-size: 0.8rem;
-    margin-left: 10px;
+    color: #555;
+    font-size: 0.9rem;
+    margin-left: 8px;
 }
 
+/* Botão de Compra Fixo no Card */
 .btn-buy-now {
     display: block;
     width: 100%;
-    background: transparent;
-    border: 1px solid #39FF14;
-    color: #39FF14;
-    padding: 12px;
+    background: var(--verde-neon);
+    color: #000;
+    padding: 14px;
     text-align: center;
     text-decoration: none;
-    font-weight: bold;
-    margin-top: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
     transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-buy-now:hover {
-    background: #39FF14;
+    background: var(--branco);
     color: #000;
 }
 
@@ -389,6 +483,8 @@ tr:hover {
     font-size: 1.5rem;
     color: #fff;
     text-shadow: 2px 2px 5px #000;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .cat-card:hover {
@@ -413,17 +509,6 @@ tr:hover {
     text-transform: uppercase;
 }
 
-.product-card {
-    border: 1px solid rgba(57, 255, 20, 0.2); /* Borda discreta */
-    transition: 0.3s;
-}
-
-.product-card:hover {
-    border: 1px solid #39FF14; /* Verde neon brilha no hover */
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
-    transform: translateY(-5px); /* Efeito de levante */
-}
-
 .custom-badge {
     background: #39FF14;
     color: #000;
@@ -434,12 +519,13 @@ tr:hover {
     text-transform: uppercase;
 }
 
-/* Container da imagem - garante que fiquem uma em cima da outra */
+/* Imagens com Troca no Hover */
 .product-image {
     position: relative;
     width: 100%;
-    height: 350px; /* Ajuste para a altura das suas fotos */
+    height: 320px;
     overflow: hidden;
+    background: #1a1a1a;
 }
 
 /* Configuração comum para ambas */
@@ -447,7 +533,7 @@ tr:hover {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.6s ease-in-out; /* Velocidade da troca */
+    transition: opacity 0.5s ease;
 }
 
 /* A foto das costas começa invisível */
@@ -459,23 +545,23 @@ tr:hover {
 }
 
 /* Quando passar o mouse no CARD inteiro: */
-.product-card:hover .img-frente {
-    opacity: 0; /* Frente some */
-}
-
-.product-card:hover .img-costas {
-    opacity: 1; /* Costas aparecem */
-}
+.product-card:hover .img-frente { opacity: 0; }
+.product-card:hover .img-costas { opacity: 1; }
 
 .input-custom {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    background: #1a1a1a;
-    border: 1px solid #39FF14; /* Verde neon do seu site */
+    padding: 10px;
+    margin-top: 8px;
+    background: #0d0d0d;
+    border: 1px solid #333;
     color: white;
-    border-radius: 5px;
+    border-radius: 4px;
     font-size: 0.8rem;
+}
+
+.input-custom:focus {
+    border-color: var(--verde-neon);
+    outline: none;
 }
 
 .customization-fields {
@@ -500,17 +586,54 @@ tr:hover {
 }
 
 #cart-count {
-    background-color: #00ff00;
+    background-color: var(--verde-neon);
     color: black;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 900;
     border-radius: 50%;
-    padding: 2px 6px;
+    padding: 2px 7px;
     position: absolute;
-    top: -10px;
+    top: -8px;
     right: -10px;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
+
+/* ===== HERO OVERLAY STRATÉGICO ===== */
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.15)
+    );
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.hero-claim {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.hero-sub {
+    font-size: 0.9rem;
+    color: var(--cinza-texto);
+    max-width: 500px;
+}
+
 
 /* ==========================================================================
    REFINAMENTO MOBILE DEFINITIVO (CORRIGIDO)
@@ -519,10 +642,16 @@ tr:hover {
     
     /* 1. CABEÇALHO: Ajuste para os links não encavalarem na Logo */
     .nav-container {
-        flex-direction: column !important;
-        height: auto !important;
-        padding: 10px 0 !important;
-        gap: 10px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav ul {
+        gap: 15px;
+    }
+
+    nav ul li a {
+        font-size: 0.75rem;
     }
 
     .nav-links {
@@ -552,52 +681,32 @@ tr:hover {
 
     /* 2. BANNER HERO: Otimizado para carregar a arte vertical */
     .hero {
-        background-image: url('img_roles/BannerMobileNew.png') !important; /* Coloque o caminho real aqui */
-        background-size: cover !important; 
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        
-        /* Proporção para celular (geralmente artes verticais) */
+        background-image: url('img_roles/BannerMobileNew.png') !important;
         aspect-ratio: 9 / 16 !important; 
-        width: 100% !important;
-        height: auto !important;
-        min-height: auto !important; 
-
-        position: relative;  
-        display: block !important;
-        justify-content: flex-end !important;
-        padding-bottom: 20px !important;
+        background-size: cover !important;
     }
 
     .hero-content {
         position: absolute !important;
+        bottom: 10% !important; /* Ajustado para sua nova arte */
         left: 50% !important;
-        transform: translateX(-50%) !important; /* Centraliza horizontalmente */
-    
-        /* AJUSTE AQUI: Mude esse valor de % até o botão bater com o desenho do banner */
-        bottom: 15% !important; 
-    
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 0 20px;
+        transform: translateX(-50%) !important;
+        width: 90% !important;
     }
 
     /* 3. BOTÃO WHATSAPP NEON */
     .btn-neon {
-        width: 85%;
-        max-width: 300px;
-        padding: 12px !important;
-        font-size: 0.85rem !important;
-        font-weight: 900;
-        text-transform: uppercase;
-        background-color: #39FF14;
-        color: #000;
-        text-align: center;
-        border-radius: 4px;
-        box-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
-        text-decoration: none;
-    }   
+    width: 80% !important;
+    max-width: 300px !important;
+    padding: 12px !important;
+    background-color: #39FF14 !important;
+    color: #000 !important;
+    font-weight: 900 !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.6) !important;
+    text-align: center !important;
+}
 
     /* 4. MOSAICO DE CATEGORIAS */
     .categories-mosaico {
@@ -620,25 +729,24 @@ tr:hover {
         height: auto !important;
     }
     
-    /* 5. GRID DE PRODUTOS: 2 Colunas Alinhadas */
+    /* Grid de 2 Colunas no Mobile */
     .product-grid {
-        display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-        padding: 10px !important;
+        gap: 12px !important;
+        padding: 0 10px !important;
     }
 
     .product-image {
-        height: 150px !important;
+        height: 200px !important;
+    }
+
+    .product-info {
+        padding: 12px;
     }
 
     .product-info h3 {
-        font-size: 0.75rem !important;
-        height: 35px;
-        line-height: 1.1;
-        padding: 5px 0;
-        text-align: center;
-        margin-bottom: 5px;
+        font-size: 0.85rem !important;
+        min-height: 35px;
     }
 
     .category {
@@ -653,8 +761,7 @@ tr:hover {
     }
 
     .price {
-        font-size: 0.9rem !important;
-        margin-bottom: 8px;
+        font-size: 1.1rem !important;
     }
 
     .old-price {
@@ -663,10 +770,8 @@ tr:hover {
     }
 
     .btn-buy-now {
-        font-size: 0.65rem !important;
-        padding: 8px 5px !important;
-        width: 100%;
-        display: block;
+        font-size: 0.75rem !important;
+        padding: 10px !important;
     }
 
     .table {
