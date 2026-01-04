@@ -1,4 +1,4 @@
-  (function () {
+(function () {
 
     const CART_KEY = 'futplus_cart';
 
@@ -48,11 +48,8 @@
       const dp = Array(qtd + 1).fill(Infinity);
       dp[0] = 0;
       for (let i = 1; i <= qtd; i++) {
-        // pacote 1
         dp[i] = Math.min(dp[i], dp[i - 1] + unitPrice);
-        // pacote 2
         if (i >= 2) dp[i] = Math.min(dp[i], dp[i - 2] + PACK_PRICES[2]);
-        // pacote 3
         if (i >= 3) dp[i] = Math.min(dp[i], dp[i - 3] + PACK_PRICES[3]);
       }
       return dp[qtd];
@@ -60,16 +57,18 @@
 
     function normalizeText(s) {
       return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  }
+    }
 
     function renderizarCarrinho() {
       const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      console.log('renderizarCarrinho -> itens:', carrinho);
       const container = criarContainerSeFaltante();
       if (!container) return;
 
       if (carrinho.length === 0) {
         container.innerHTML = `<p style="color:#666;text-align:center">Seu carrinho está vazio.</p>`;
+        // Se o carrinho esvaziar, resetamos o desconto global
+        window.descontoGlobal = 0;
+        window.cupomAplicado = "Nenhum";
         atualizarTotais(0,0,0);
         atualizarContador();
         return;
@@ -79,18 +78,15 @@
       container.innerHTML = '';
       carrinho.forEach((item, idx) => {
         const qty = Number(item.quantidade || 1);
-        const estiloNorm = normalizeText(item.estilo || '');
+        const estilo = (item.estilo || '').toLowerCase();
         let lineTotal = 0;
-        if (estiloNorm.includes('retro')) {
-          lineTotal = Number(item.preco || 180) * qty;
+        
+        if (estilo.includes('retro')) {
+          lineTotal = 180 * qty;
         } else {
-          const unitPrice = Number(item.preco || 140);
-          lineTotal = computeBundleTotal(qty, unitPrice);
+          lineTotal = computeBundleTotal(qty, 140);
         }
         subtotal += lineTotal;
-
-        const nomePersonal = item.personalizacao?.nome ?? '-';
-        const numeroPersonal = item.personalizacao?.numero ?? '-';
 
         const el = document.createElement('div');
         el.className = 'cart-item';
@@ -98,128 +94,112 @@
           <img src="${item.foto}" alt="${item.nome}" />
           <div class="item-info">
             <h4>${item.nome}</h4>
-            <p>Tam: ${item.tamanho || '-'} | Nome: ${nomePersonal} | Nº: ${numeroPersonal}</p>
+            <p>Tam: ${item.tamanho} | Nome: ${item.personalizacao.nome} | Nº: ${item.personalizacao.numero}</p>
           </div>
           <div class="item-right">
-            <span class="item-price">R$ ${lineTotal.toFixed(2).replace('.',',')}</span>
-            <button class="btn-remove" data-index="${idx}"><i class="fas fa-trash"></i></button>
+            <span class="item-price">R$ ${lineTotal.toFixed(2).replace('.', ',')}</span>
+            <button class="btn-remove" onclick="removerItem(${idx})"><i class="fas fa-trash"></i></button>
           </div>
         `;
         container.appendChild(el);
       });
 
-      container.querySelectorAll('.btn-remove').forEach(b => b.addEventListener('click', (ev) => {
-        const idx = Number(ev.currentTarget.getAttribute('data-index'));
-        removerItem(idx);
-      }));
-
-      const freteVal = Number(document.getElementById('frete-val')?.innerText.replace(/[^\d,\.]/g,'')?.replace(',','.') || 0);
-      atualizarTotais(subtotal, window.descontoGlobal || 0, window.fretegratis ? 0 : freteVal);
+      const freteVal = 0; 
+      atualizarTotais(subtotal, window.descontoGlobal || 0, freteVal);
       atualizarContador();
     }
 
-    function removerItem(index) {
-      const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+    window.removerItem = function(index) {
+      let carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      
       if (index >= 0 && index < carrinho.length) {
         carrinho.splice(index, 1);
         localStorage.setItem(CART_KEY, JSON.stringify(carrinho));
+
+        // LÓGICA DE VALIDAÇÃO DO CUPOM APÓS REMOÇÃO
+        const qtdNormal = carrinho.filter(i => !i.estilo.toLowerCase().includes('retro')).length;
+        const cupomAtivo = window.cupomAplicado || "";
+
+        if (cupomAtivo.includes("COMBO3") && qtdNormal < 3) {
+            window.descontoGlobal = 0;
+            window.cupomAplicado = "Nenhum";
+            console.log("Cupom COMBO3 removido: requisitos não atendidos.");
+        } 
+        else if (cupomAtivo.includes("COMBO2") && qtdNormal < 2) {
+            window.descontoGlobal = 0;
+            window.cupomAplicado = "Nenhum";
+            console.log("Cupom COMBO2 removido: requisitos não atendidos.");
+        }
+
         renderizarCarrinho();
-        mostrarToast && mostrarToast('Item removido');
       }
-    }
+    };
 
     function formatMoneyBR(n) {
       return 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
     }
 
-    function atualizarTotais(subtotal = 0, desconto = 0, frete = 0) {
+    function atualizarTotais(subtotal, desconto, frete) {
       const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
       const extra = carrinho.reduce((s, it) => {
-        const temNome = it.personalizacao && (it.personalizacao.nome || '').trim() && it.personalizacao.nome !== '-';
-        return s + (temNome ? 20 * (it.quantidade || 1) : 0);
+        const temNome = it.personalizacao && it.personalizacao.nome !== '-';
+        return s + (temNome ? 20 : 0);
       }, 0);
-      const total = Math.max(0, subtotal + extra + Number(frete || 0) - Number(desconto || 0));
-      const elSub = document.getElementById('subtotal-val');
-      const elExtra = document.getElementById('extra-val');
-      const elTotal = document.getElementById('total-val');
-      if (elSub) elSub.innerText = formatMoneyBR(subtotal);
-      if (elExtra) elExtra.innerText = formatMoneyBR(extra);
-      if (elTotal) elTotal.innerText = formatMoneyBR(total);
-      // retorna para debugging/testes
-      return { subtotal, extra, frete, desconto, total };
-    }
-    window.atualizarTotais = atualizarTotais;
 
-    const VALID_COUPONS = {
-      'FUT10': { type: 'percent', value: 10, label: '10% OFF' },
-      'DESCONTO20': { type: 'fixed', value: 20, label: 'R$20 OFF' },
-      'FRETEGRATIS': { type: 'frete', value: 0, label: 'Frete Grátis' }
-      // removidos COMBO2/COMBO3 porque bundles são padrão agora
+      const totalFinal = subtotal + extra + frete - desconto;
+
+      if(document.getElementById('subtotal-val')) document.getElementById('subtotal-val').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      if(document.getElementById('extra-val')) document.getElementById('extra-val').innerText = `R$ ${extra.toFixed(2).replace('.', ',')}`;
+      if(document.getElementById('total-val')) document.getElementById('total-val').innerText = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+    }
+
+    window.aplicarCupom = function() {
+      const code = document.getElementById('cupom')?.value?.trim().toUpperCase();
+      const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      const qtdNormal = carrinho.filter(i => !i.estilo.includes('retro')).length;
+
+      if (code === 'FUT10') {
+          const sub = parseFloat(document.getElementById('subtotal-val').innerText.replace('R$', '').replace(',', '.'));
+          window.descontoGlobal = sub * 0.10;
+          window.cupomAplicado = "FUT10 (10%)";
+          alert("Cupom de 10% aplicado!");
+      } 
+      else if (code === 'COMBO2' && qtdNormal >= 2) {
+          window.descontoGlobal = 50; // Exemplo: de 280 por 230
+          window.cupomAplicado = "COMBO2 (Promoção 2 camisas)";
+          alert("Desconto do Combo 2 Camisas aplicado!");
+      }
+      else if (code === 'COMBO3' && qtdNormal >= 3) {
+          window.descontoGlobal = 90; // Exemplo: de 420 por 330
+          window.cupomAplicado = "COMBO3 (Promoção 3 camisas)";
+          alert("Desconto do Combo 3 Camisas aplicado!");
+      }
+      else {
+          alert("Cupom inválido ou requisitos não atendidos.");
+          window.descontoGlobal = 0;
+          window.cupomAplicado = "Nenhum";
+      }
+      renderizarCarrinho();
     };
 
-    function validarCupom(code) {
-      if(!code) return null;
-      return VALID_COUPONS[code.trim().toUpperCase()] || null;
-    }
+    window.checkoutWhatsApp = function() {
+        const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        if (carrinho.length === 0) return alert("Carrinho vazio!");
 
-    function aplicarCupom() {
-      const input = document.getElementById('coupon-code');
-      const code = input?.value?.trim().toUpperCase() || '';
-      const info = validarCupom(code);
-      if (!info) {
-        mostrarToast && mostrarToast('Cupom inválido');
-        window.descontoGlobal = 0;
-        window.fretegratis = false;
-        localStorage.removeItem('futplus_coupon');
-        const subtotal = JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce((s,i)=> s + (Number(i.preco||0)*(i.quantidade||1)), 0);
-        atualizarTotais(subtotal, 0, window.fretegratis ? 0 : Number(document.getElementById('frete-val')?.innerText?.replace(/[^\d,\.]/g,'')?.replace(',','.') || 0));
-        return;
-      }
+        const total = document.getElementById('total-val').innerText;
+        const subtotal = document.getElementById('subtotal-val').innerText;
+        
+        let msg = `⚽ *NOVO PEDIDO - FUTPLUS* ⚽%0A%0A`;
 
-      // calcula desconto com base no carrinho
-      const carrinho = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      const subtotal = carrinho.reduce((s,i)=> s + (Number(i.preco||0)*(i.quantidade||1)), 0);
-      let desconto = 0;
-      if (info.type === 'percent') desconto = subtotal * (info.value/100);
-      if (info.type === 'fixed') desconto = info.value;
-      if (info.type === 'frete') {
-        window.fretegratis = true;
-      } else {
-        window.fretegratis = false;
-      }
+        carrinho.forEach((item, i) => {
+            msg += `*${i+1}. ${item.nome}*%0A`;
+            msg += `   - Tam: ${item.tamanho}%0A`;
+            msg += `   - Personalização: ${item.personalizacao.nome} (${item.personalizacao.numero})%0A%0A`;
+        });
 
-      window.descontoGlobal = Number(desconto.toFixed(2));
-      localStorage.setItem('futplus_coupon', JSON.stringify({ code, info, desconto: window.descontoGlobal, fretegratis: !!window.fretegratis }));
-      mostrarToast && mostrarToast(`Cupom ${code} aplicado: ${info.label || ''}`);
-      const freteVal = window.fretegratis ? 0 : Number(document.getElementById('frete-val')?.innerText?.replace(/[^\d,\.]/g,'')?.replace(',','.') || 0);
-      atualizarTotais(subtotal, window.descontoGlobal, freteVal);
-      atualizarCupomUI();
-    }
-
-    function carregarCupomSalvo() {
-      const saved = JSON.parse(localStorage.getItem('futplus_coupon') || 'null');
-      if (!saved) return;
-      window.descontoGlobal = saved.desconto || 0;
-      window.fretegratis = !!saved.fretegratis;
-      const input = document.getElementById('coupon-code');
-      if (input) input.value = saved.code || '';
-      atualizarCupomUI();
-      // recalcula totais com cupom carregado
-      const subtotal = JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce((s,i)=> s + (Number(i.preco||0)*(i.quantidade||1)), 0);
-      const freteVal = window.fretegratis ? 0 : Number(document.getElementById('frete-val')?.innerText?.replace(/[^\d,\.]/g,'')?.replace(',','.') || 0);
-      atualizarTotais(subtotal, window.descontoGlobal || 0, freteVal);
-    }
-
-    function atualizarCupomUI() {
-      const info = JSON.parse(localStorage.getItem('futplus_coupon') || 'null');
-      const el = document.getElementById('discount-val') || document.querySelector('.discount-val');
-      if (!el) return;
-      if (!info) {
-        el.innerText = 'R$ 0,00';
-        return;
-      }
-      el.innerText = (info.info && info.info.type === 'percent') ? `${info.info.value}%` : formatMoneyBR(info.desconto || 0);
-    }
+        msg += `*TOTAL FINAL:* ${total}%0A`;
+        window.open(`https://wa.me/5511980177729?text=${msg}`, '_blank');
+    };
 
     window.addEventListener('load', () => {
       lerEnormalizarCarrinho();
@@ -230,4 +210,5 @@
     window.renderizarCarrinho = renderizarCarrinho;
     window.removerItem = removerItem;
     window.atualizarContador = atualizarContador;
-  })();
+    window.atualizarTotais = atualizarTotais;
+})();
